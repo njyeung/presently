@@ -6,6 +6,10 @@
   .contain {
     @apply container mx-auto px-5 md:px-20
   }
+
+  .bg-gradient {
+    @apply bg-gradient-to-br from-purple-600 to-blue-500 text-white
+  }
 }
 @layer base {
   :root {

@@ -8,11 +8,10 @@ import PresentBox from "@/assets/PresentBox.png"
 import { buttonVariants } from "@/components/ui/button"
 
 export default function Hero() {
-
-    return <section className="pt-10 pb-20 bg-white">
+    return <section className="pt-10 pb-20 bg-gradient">
         <div className="contain">
-            <div className="flex md:flex-row flex-col items-center">
-                <div className="max-w-[500px] gap-5">
+            <div className="flex md:flex-row flex-col items-center gap-5">
+                <div className="max-w-[500px]">
                     <h1 className="text-4xl md:text-7xl font-bold black bg-clip-text mt-6">
                         Presently Perfect for Every Occasion
                     </h1>
@@ -25,8 +24,8 @@ export default function Hero() {
                         <ArrowRight></ArrowRight>
                     </Link>
                 </div>
-                <div className="mt-20 md:mt-0 md:h-[648px] md:flex-1 relative">
-                    <div className="block md:absolute h-[400px] w-[400px]">
+                <div className="mt-20 h-[648px] relative flex items-center justify-center">
+                    <div>
                         <Image
                         src={PresentBox} alt="present box" 
                         width={500} height={500}
