@@ -20,10 +20,15 @@ export default function Hero() {
                         Whether it's a birthday, anniversary, or a spontaneous surprise, PresentLy makes gift giving effortless.
                         Explore personalized recommendations that guarantee a smile.
                     </p>
-                    <Link href="#ocassions" className={twMerge(buttonVariants({ variant: "default" }), "mt-4 p-5 text-lg")}>
-                        Try it now
-                        <ArrowRight></ArrowRight>
-                    </Link>
+                    <div className="flex flex-row gap-2"> 
+                        <Link href="/about" className={twMerge(buttonVariants({ variant: "ghost" }), "mt-4 p-5 text-lg")}>
+                            Learn More
+                        </Link>
+                        <Link href="#ocassions" className={twMerge(buttonVariants({ variant: "default" }), "mt-4 p-5 text-lg")}>
+                            Try it now
+                            <ArrowRight></ArrowRight>
+                        </Link>
+                    </div>
                 </div>
                 <div className="mt-10 md:h-[648px] h-[400px] relative flex items-center justify-center">
                     <div className="w-[320px] md:w-[500px]">

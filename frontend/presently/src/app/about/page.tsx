@@ -8,7 +8,7 @@ export default function About() {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-gradient p-8 pt-16">
+            <div className="min-h-screen bg-gradient p-8 pt-20">
                 <div className="max-w-3xl mx-auto bg-white text-black p-8 rounded-lg shadow-lg">
                     <h1 className="text-4xl font-extrabold text-center mb-6">🎁 About Presently</h1>
 
