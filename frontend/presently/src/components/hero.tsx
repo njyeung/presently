@@ -1,6 +1,8 @@
 import Link from "next/link"
 import Image from "next/image"
 import { twMerge } from "tailwind-merge"
+import ArrowRight from "@/assets/ArrowRight.svg"
+
 import { buttonVariants } from "@/components/ui/button"
 
 export default function Hero() {
@@ -17,6 +19,7 @@ export default function Hero() {
                     </p>
                     <Link href="#" className={twMerge(buttonVariants({ variant: "default" }), "mt-4 p-5 text-lg")}>
                         Try it now
+                        <ArrowRight></ArrowRight>
                     </Link>
                 </div>
                 <div className="mt-20 md:mt-0 md:h-[648px] md:flex-1 relative">
