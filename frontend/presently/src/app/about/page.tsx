@@ -46,7 +46,7 @@ export default function About() {
                     <h2 className="text-2xl font-bold mt-6 mb-3 text-black">💡 Get Started</h2>
                     <p className="text-lg mb-4 text-black">
                         Click on the **Search** button in the navigation bar to begin your gift-finding journey.
-                        Simply enter the recipient's details, and Presently will generate a list of curated gift ideas that match their profile.
+                        Simply enter the recipient's details, and Presently will generate a list of curated gift ideas that align with their preferences.
                     </p>
 
                     <div className="flex justify-center mt-8">
