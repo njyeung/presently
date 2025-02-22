@@ -3,8 +3,8 @@ import Image from "next/image"
 import { buttonVariants } from "@/components/ui/button"
 
 export default function Hero() {
-    return <section className="pt-8 pb-20 md:pt-5 md:pb-10 bg-[radial-gradient(ellipse_200%_100%_at_bottom_left,#183EC2,#EAEEFE_100%)] ">
-        <div className="container pt-10 px-4">
+    return <section className="pt-10 pb-20 bg-[radial-gradient(ellipse_200%_100%_at_bottom_left,#183EC2,#EAEEFE_100%)] ">
+        <div className="contain">
             <div className="md:flex items-center">
                 <div className="">
                     <h1 className="text-5xl md:text-7xl font-bold black bg-clip-text mt-6">
