@@ -1,0 +1,3 @@
+.venv
+/gensim-data
+GoogleNews-vectors-negative300*
