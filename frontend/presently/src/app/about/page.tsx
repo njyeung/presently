@@ -10,14 +10,19 @@ export default function About() {
                     <h1 className="text-4xl font-extrabold text-center mb-6">🎁 About Presently</h1>
 
                     <p className="text-lg mb-4 text-gray-800">
-                        Welcome to <span className="font-semibold">Presently</span>—your AI-powered gift recommendation assistant! Finding the perfect gift can be overwhelming,
-                        but with Presently, you get data-driven suggestions tailored to the recipient's preferences.
+                        Welcome to <span className="font-semibold">Presently</span>—an intelligent gift recommendation platform designed to simplify the process of finding the perfect gift.
+                        Using advanced data analysis and machine learning, Presently delivers personalized gift suggestions based on recipient preferences and market trends.
                     </p>
 
-                    <h2 className="text-2xl font-bold mt-6 mb-3 text-gray-900">🚀 What is Presently?</h2>
+                    <h2 className="text-2xl font-bold mt-6 mb-3 text-gray-900">🚀 Our Mission</h2>
                     <p className="text-lg mb-4 text-gray-700">
-                        Presently is a **hackathon project** built to leverage **machine learning** and a **curated dataset** of best-selling products
-                        to suggest the perfect gift. Whether it's a birthday, holiday, or a special occasion, we analyze key details such as:
+                        Selecting the right gift can be challenging. Presently aims to eliminate guesswork by offering data-driven recommendations tailored to individual preferences.
+                        By leveraging a carefully curated database of best-selling products, our platform ensures that every gift suggestion is relevant, thoughtful, and well-suited to the recipient.
+                    </p>
+
+                    <h2 className="text-2xl font-bold mt-6 mb-3 text-gray-900">🧠 How It Works</h2>
+                    <p className="text-lg mb-4 text-gray-700">
+                        Presently utilizes a **machine learning model** that analyzes key attributes such as:
                     </p>
                     <ul className="list-disc pl-6 text-lg text-gray-700 mb-4">
                         <li><span className="font-semibold">Gender</span></li>
@@ -25,25 +30,23 @@ export default function About() {
                         <li><span className="font-semibold">Price Range</span></li>
                         <li><span className="font-semibold">Interests & Preferences</span></li>
                     </ul>
-
-                    <h2 className="text-2xl font-bold mt-6 mb-3 text-gray-900">🧠 How It Works</h2>
                     <p className="text-lg mb-4 text-gray-700">
-                        Using a **machine learning model**, Presently analyzes data from a database of trending products and best-selling gifts.
-                        The system finds the most suitable gift ideas that match the user's input criteria, ensuring **personalized** and **thoughtful** suggestions.
+                        The system cross-references this information with real-time market data to recommend the most suitable products.
+                        Each recommendation is optimized based on **trending products, consumer behavior, and past purchasing patterns**.
                     </p>
 
-                    <h2 className="text-2xl font-bold mt-6 mb-3 text-gray-900">🌟 Why Use Presently?</h2>
+                    <h2 className="text-2xl font-bold mt-6 mb-3 text-gray-900">🌟 Why Choose Presently?</h2>
                     <p className="text-lg mb-4 text-gray-700">
-                        - **AI-Powered Recommendations** – Get smart suggestions based on real-world data. <br />
-                        - **Time-Saving** – No more endless searching for the right gift. <br />
-                        - **Personalized Results** – Every suggestion is tailored to fit the recipient. <br />
-                        - **Hackathon Innovation** – A project built with cutting-edge web technologies.
+                        - **AI-Powered Recommendations** – Get smart, data-driven gift suggestions. <br />
+                        - **Efficiency** – Save time by letting our system find the best options. <br />
+                        - **Personalization** – Every suggestion is tailored to fit the recipient's profile. <br />
+                        - **Market-Driven Insights** – Recommendations are based on real-time trends and best-selling products. <br />
                     </p>
 
                     <h2 className="text-2xl font-bold mt-6 mb-3 text-gray-900">💡 Get Started</h2>
                     <p className="text-lg mb-4 text-gray-700">
                         Click on the **Search** button in the navigation bar to begin your gift-finding journey.
-                        Simply enter the recipient's details, and Presently will generate a list of curated gift ideas that match their profile.
+                        Simply enter the recipient's details, and Presently will generate a list of curated gift ideas that align with their preferences.
                     </p>
 
                     <div className="flex justify-center mt-8">
