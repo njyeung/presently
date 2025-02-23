@@ -236,7 +236,7 @@ def query_all_from_table(table_name: str):
 
 if __name__ == "__main__":
     # generate_products()
-    # generate_product_categories()
-    generate_categories()
+    generate_product_categories()
+    # generate_categories()
     # update_categories()
     pass

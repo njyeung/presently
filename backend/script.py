@@ -33,7 +33,7 @@ def query_all_from_table(table_name: str):
     return all_data
 
 
-def find_categories(query: str, category_list: list) -> list:
+def find_categories(title: str, query: str, category_list: list) -> list:
     """
     Finds the most relevant categories given a user query.
     """
@@ -46,7 +46,7 @@ def find_categories(query: str, category_list: list) -> list:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
     client = OpenAI(api_key=OPENAI_API_KEY)
-
+    first_term = query.split(",")[0]
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
@@ -56,15 +56,16 @@ def find_categories(query: str, category_list: list) -> list:
             },
             {
                 "role": "user",
-                "content": f"""Given this query: {query}, find the most relevant categories from this list: {category_list}. 
-                I want you to pick out the category that you think is the most representative of what this person wants to buy. 
-                Then, the relevant categories that I want you to pick out from the list should be very closely related to this said category.
-                Limit your answer to FIVE categories, and return them as a list of python strings. 
-                In your output, ONLY inclde the list, don't include the code block indents. 
-                Order the items in the list by the most relevant keywords that will pinpoint the best products for the user.""",
+                "content": f"""Given the occasion '{title}' and search query '{query}', analyze these categories: {category_list}
+                    Select up to 3 most relevant categories, with:
+                    1. The single most representative category for this search
+                    2. Three similar related categories that are relevant to the search
+                    The first term of the query ({first_term}) is the one that the person is most interested in.
+                    Return only a Python list of strings, ordered by relevance. 
+                    Remove the python block formatting, only return the list.""",
             },
         ],
-        temperature=1,
+        temperature=0.7,
     )
     response = completion.choices[0].message.content
     print(response)
@@ -96,16 +97,28 @@ def LLM_feed():
     return all_data
 
 
-def find_top_products(query: str) -> list:
+def find_top_products(title: str, query: str, price: float = None) -> list:
     """
-    Finds the top 10 products for each category, prioritizing niche products.
+    Finds the most relevant products based on categories and refines the selection using GPT.
     """
     category_list = LLM_feed()
-    top_categories = find_categories(query=query, category_list=category_list)
+    top_categories = find_categories(
+        title=title, query=query, category_list=category_list
+    )
 
     all_products = pd.DataFrame(query_all_from_table("products"))
     all_product_categories = pd.DataFrame(query_all_from_table("product_categories"))
     all_categories = pd.DataFrame(query_all_from_table("categories"))
+
+    # Filter products by price if price parameter is provided
+    if price is not None and price > 0:
+        price_tolerance = 0.2  # 20% tolerance
+        price_min = price * (1 - price_tolerance)
+        price_max = price * (1 + price_tolerance)
+        all_products = all_products[
+            (all_products["salePrice"] >= price_min)
+            & (all_products["salePrice"] <= price_max)
+        ]
 
     # Category joins with productCount and importance included
     category_mapping = all_product_categories.merge(
@@ -163,21 +176,85 @@ def find_top_products(query: str) -> list:
         ascending=[True, True, False, False],
     )
 
-    return sorted_results.head(10).to_dict("records")
+    # Get initial top 10 products
+    initial_results = sorted_results.head(10).to_dict("records")
+    
+    # Refine to top 5 most relevant products
+    final_results = refine_products(initial_results, title, query)
+    
+    return final_results
+
+
+def refine_products(products: list, title: str, query: str) -> list:
+    """
+    Uses GPT to analyze and select the top 5 most relevant products from the initial 10 products.
+    """
+    from openai import OpenAI
+    import ast
+
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    # Prepare product information for GPT
+    product_info = []
+    for p in products:
+        info = {
+            "name": p["name"],
+            "categories": p["categories"],
+            "price": p["salePrice"],
+            "id": p["id"]
+        }
+        product_info.append(info)
+
+    completion = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a helpful assistant that analyzes product relevance for gift recommendations."
+            },
+            {
+                "role": "user",
+                "content": f"""For the occasion '{title}' and search criteria '{query}', analyze these products:
+                    {product_info}
+                    
+                    Select the 5 most relevant products considering:
+                    1. How well the product matches the occasion
+                    2. How well it matches the search criteria
+                    3. How appropriate the product categories are
+                    
+                    Return only a Python list of product IDs, ordered by relevance.
+                    No explanation needed, just the list of IDs without the python indentation block."""
+            }
+        ],
+        temperature=0.7
+    )
+    
+    selected_ids = ast.literal_eval(completion.choices[0].message.content)
+    
+    # Filter and sort the original products list based on selected IDs
+    selected_products = [p for p in products if p["id"] in selected_ids]
+    # Sort products to match the order of selected_ids
+    selected_products.sort(key=lambda x: selected_ids.index(x["id"]))
+    
+    return selected_products
 
 
 if __name__ == "__main__":
     import json
 
-    top_products = find_top_products(query="Car,Male,Age 16")
+    top_products = find_top_products(
+        title="Birthday", query="Toys,Male,Age 32", price=20
+    )
     print(json.dumps(top_products, indent=4))
 
 
 def lambda_handler(event, context):
     try:
-        # Extract query from request body
+        # Extract query and price from request body
         body = json.loads(event.get("body", "{}"))
+        title = body.get("title", "")
         query = body.get("query", "")
+        price = body.get("price", None)
 
         if not query:
             return {
@@ -191,8 +268,8 @@ def lambda_handler(event, context):
                 ),
             }
 
-        # Get product recommendations
-        products = find_top_products(query)
+        # Get product recommendations with refined selection
+        products = find_top_products(title=title, query=query, price=price)
 
         # Return successful response
         return {
