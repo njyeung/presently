@@ -7,7 +7,8 @@ export default function Loading() {
         "PresentLy in deep thought...",
         "PresentLy consulting the wise AI wizards",
         "Sprinkling a PresentLy high dose of magic...",
-        "Digging deep for the most PresentLy of gifts"
+        "Digging deep for the most PresentLy of gifts",
+        "We hope you will be PresentLy surprised..."
     ]
     const randomMessage = loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
 

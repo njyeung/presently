@@ -9,7 +9,7 @@ import MothersDay from "@/assets/mothers-day.jpg"
 import FathersDay from "@/assets/fathers-day.jpg"
 import ComingSoon from "@/assets/coming-soon.jpg"
 import { useRouter } from 'next/navigation'
-
+import { motion } from "framer-motion"
 const occasions = [
     {
         id: 1,
@@ -67,11 +67,17 @@ export default function Ocassions() {
       <div className="contain mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8">Browse All Occasions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {occasions.map((occasion) => (
-            <div key={occasion.id} 
-            className="bg-white rounded-xl shadow p-4 hover:cursor-pointer hover:scale-110 transition-all"
-            onClick={() => router.push(`/occasion/${occasion.id}`)}
+          {occasions.map((occasion, index) => (
+            <motion.div
+              key={occasion.id} 
+              initial = {{ opacity: 0, scale: 0.8 }}
+              animate = {{ opacity: 1, scale: 1 }}
+              transition = {{duration: 0.3, delay: 0.1*index}}
             >
+              <div 
+              className="bg-white rounded-xl shadow p-4 hover:cursor-pointer hover:scale-110 transition-all"
+              onClick={() => router.push(`/occasion/${occasion.id}`)}
+              >
               <div className="relative w-full h-40 mb-4">
                 <Image
                   src={occasion.image}
@@ -83,7 +89,8 @@ export default function Ocassions() {
               </div>
               <h3 className="text-xl font-semibold">{occasion.title}</h3>
               <p className="mt-2">{occasion.description}</p>
-            </div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>

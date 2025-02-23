@@ -31,21 +31,21 @@ export default function About() {
 
                     <h2 className="text-2xl font-bold mt-6 mb-3 text-black">Why Use Presently?</h2>
                     <p className="text-lg mb-4 text-black">
-                        - **AI-Powered Recommendations** – Get smart suggestions based on real-world data. <br />
-                        - **Time-Saving** – No more endless searching for the right gift. <br />
-                        - **Personalized Results** – Every suggestion is tailored to fit the recipient. <br />
-                        - **Hackathon Innovation** – A project built with cutting-edge web technologies.
+                        - AI-Powered Recommendations – Get smart suggestions based on real-world data. <br />
+                        - Time-Saving – No more endless searching for the right gift. <br />
+                        - Personalized Results – Every suggestion is tailored to fit the recipient. <br />
+                        - Hackathon – A project built with cutting-edge web technologies.
                     </p>
 
                     <h2 className="text-2xl font-bold mt-6 mb-3 text-black">Get Started</h2>
                     <p className="text-lg mb-4 text-black">
-                        Click on the **Search** button in the navigation bar to begin your gift-finding journey.
+                        Click on the Search button in the navigation bar to begin your gift-finding journey.
                         Simply enter the recipient's details, and Presently will generate a list of curated gift ideas that align with their preferences.
                     </p>
 
                     <div className="flex justify-center mt-8">
                         <Link href ="/" 
-                            className={twMerge(buttonVariants({ variant: "default" }), "text-lg px-6 py-3 rounded-full shadow-md transition-all duration-300")}>
+                            className={twMerge(buttonVariants({ variant: "default" }), "text-lg px-6 py-3 rounded-lg shadow-md transition-all duration-300")}>
                             Return to Homepage
                             <ArrowRight></ArrowRight>
                         </Link>

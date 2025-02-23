@@ -32,11 +32,10 @@ export default async function Results({searchParams}: {
     const occasionName = occasions[occasionId-1];
 
     const queryParams = [
-            params.age,
-            params.gender,
             params.interests,
+            `Age ${params.age}`,
+            params.gender,
             params.relationship,
-            params.budget,
             params.personality,   // Birthday
             params.fieldOfStudy,  // Graduation
             params.futurePlans,   // Graduation
@@ -47,7 +46,7 @@ export default async function Results({searchParams}: {
             return true;
         })
 
-    console.log(queryParams.join(","))
+    console.log(params.budget)
     
     const recommendations: Recommendation[] = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
         method: "POST",
@@ -56,13 +55,19 @@ export default async function Results({searchParams}: {
         },
         body: JSON.stringify({
             title: occasionName,
-            query: queryParams.join(',')
+            query: queryParams.join(','),
+            price: parseInt(params.budget)
         })
-    }).then((res)=>res.json()).then((data: any[])=>{
+    }).then((res)=>res.json()).then((data)=> {
+        console.log(data)
+        return data
+    }).then((data: any[])=>{
+        console.log(data)
         return data.map((entry:any) => {
-            console.log(entry)
+            
             const [name, description] = entry.name.split(/[,|-]/, 2);
-            const salePriceString = '$' + entry.salePrice
+            const salePriceString = `$${entry.salePrice.toFixed(2)}`
+
             return {
                 name: name,
                 description: description,

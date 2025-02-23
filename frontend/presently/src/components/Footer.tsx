@@ -21,11 +21,12 @@ export const Footer = () => {
             <p className="text-white">Brought to you by</p>
           </div>
           <div className="flex justify-center gap-6 mt-6">
-              <a href="#">Slava</a>
-              <a href="#">Will</a>
-              <a href="#">Nick</a>
-              <a href="#">Vishnu</a>
-              <a href="#">Andrew</a>
+              <a href="https://github.com/Slava-code">Slava</a>
+              <a href="https://github.com/IIXIIII">Will</a>
+              <a href="https://github.com/njyeung">Nick</a>
+              <a href="https://github.com/ach968">Andrew</a>
+              <a href="https://github.com/VishnuR121">Vishnu</a>
+              <a href="https://github.com/jamesbrcr">James</a>
           </div>
         </div>
       </div>

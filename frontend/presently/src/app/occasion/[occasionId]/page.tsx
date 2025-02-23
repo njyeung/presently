@@ -27,8 +27,8 @@ export default function Occasion() {
         router.push(`/occasion/${occasionIdNumber}/results?info=${JSON.stringify(formData)}`);
     }
 
-    return <>
+    return <section>
         <Form submit={(e:any)=>{onSubmit(e)}} occasionId={occasionIdNumber} />
         <Footer />
-    </>
+    </section>
 }

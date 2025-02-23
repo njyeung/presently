@@ -61,24 +61,24 @@ export default function Form(props: any) {
             setAlert(true);
             return;
           }
-          console.log("SUBMIT")
           // Validate occasion-specific fields based on the occasionId
           // Birthday
-          if (occasionId === "1" && !personality) {
+          if (occasionId == "1" && !personality) {
             setAlert(true);
             return;
           }
           // Graduation
-          if (occasionId === "2" && (!fieldOfStudy || !futurePlans)) {
+          if (occasionId == "2" && (!fieldOfStudy || !futurePlans)) {
             setAlert(true);
             return;
           }
-          // Anniversary or Christmas (both use traditions in this example)
-          if (occasionId === "3" && !loveLanguage) {
+          // Anniversary 
+          if (occasionId == "3" && !loveLanguage) {
             setAlert(true);
             return;
           }
-          if (occasionId === "3"  && !traditions) {
+          // 
+          if (occasionId == "4"  && !traditions) {
             setAlert(true);
             return;
           }
@@ -86,7 +86,7 @@ export default function Form(props: any) {
     }
 
     return <>
-        <section className="bg-gray-50 py-20 h-screen">
+        <section className="bg-gray-50 py-20 m-h-screen">
             <div className="max-w-2xl mx-auto contain">
             <motion.div
                 initial={{opacity: 0,  transform: "translateY(8px)"}}
@@ -227,7 +227,7 @@ export default function Form(props: any) {
                             name="loveLanguage"
                             value={formData.params.loveLanguage}
                             onChange={handleChange}
-                            placeholder="e.g. "
+                            placeholder="e.g. quality time, words of affirmation"
                             className="w-full border rounded p-2 bg-gray-200"
                         />
                         </div>
@@ -284,8 +284,8 @@ export default function Form(props: any) {
             </motion.div>
             
             { alert ? <motion.div
-                initial= {{ opacity: 1, translateY: 0}}
-                animate={{ opacity: 0, translateY: 5}}
+                initial= {{ opacity: 0, translateY: 5}}
+                animate={{ opacity: 1, translateY: 0}}
                 transition={{ duration: 0.3, delay: 0 }}
             >
                 <div className="mt-5 w-full h-9 bg-red-600 flex text-white rounded-xl p-2 justify-center items-center">
