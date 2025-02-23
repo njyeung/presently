@@ -1,5 +1,6 @@
 "use client"
 
+import { Footer } from "@/components/Footer";
 import Form from "@/components/Form"
 import { useParams } from "next/navigation";
 import { useRouter } from 'next/navigation'
@@ -26,7 +27,8 @@ export default function Occasion() {
         router.push(`/occasion/${occasionIdNumber}/results?info=${JSON.stringify(formData)}`);
     }
 
-    return <>
+    return <section>
         <Form submit={(e:any)=>{onSubmit(e)}} occasionId={occasionIdNumber} />
-    </>
+        <Footer />
+    </section>
 }

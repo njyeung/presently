@@ -14,16 +14,19 @@ export const Footer = () => {
           </div>
           <nav className="flex flex-col md:flex-row md:justify-center gap-6 mt-6">
             <a href="/about">About</a>
+            <a href="/browse">Browse</a>
+            <a href="/saved">Saved</a>
           </nav>
           <div className="mt-6 inline-flex relative before:content-[''] before:top-2 before:bottom-0 before:w-full before:blur before:bg-gradient before:absolute">
             <p className="text-white">Brought to you by</p>
           </div>
           <div className="flex justify-center gap-6 mt-6">
-              <a href="#">Slava</a>
-              <a href="#">Will</a>
-              <a href="#">Nick</a>
-              <a href="#">Vishnu</a>
-              <a href="#">Andrew</a>
+              <a href="https://github.com/Slava-code">Slava</a>
+              <a href="https://github.com/IIXIIII">Will</a>
+              <a href="https://github.com/njyeung">Nick</a>
+              <a href="https://github.com/ach968">Andrew</a>
+              <a href="https://github.com/VishnuR121">Vishnu</a>
+              <a href="https://github.com/jamesbrcr">James</a>
           </div>
         </div>
       </div>

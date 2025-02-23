@@ -10,6 +10,57 @@
   .bg-gradient {
     @apply bg-gradient-to-br from-purple-600 to-blue-500 text-white
   }
+
+  .fade-mask {
+    mask: linear-gradient(to right, black 95%, transparent);
+  }
+
+  /* downgraded scrollbar for firefox lol */
+  @-moz-document url-prefix() {
+    .scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: #3b82f6 #f1f1f1;
+    }
+  }
+
+  /* Cooler scrollbar for the cool browsers */
+  .scrollbar::-webkit-scrollbar {
+    height: 8px;
+  }
+  .scrollbar::-webkit-scrollbar {
+    height: 8px;
+  }
+  .scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+    transition: 1s ease;
+  }
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+    transition: 1s ease;
+  }
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gradient-to-br from-purple-600 to-blue-500 text-white;
+    transition: 1s ease;
+  }
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  
+    line-height: 5; /* Adjust line height to prevent clipping */
+    max-height: 5rem; /* Matches line-height to avoid cut-off */
+  }
+  .description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
 }
 @layer base {
   :root {

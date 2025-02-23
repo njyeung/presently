@@ -1,6 +1,17 @@
 import { redirect } from 'next/navigation';
 import Listings from "@/components/Listings"
+import { Footer } from '@/components/Footer';
 
+function delay(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+interface Recommendation {
+    name: string;
+    description: string;
+    price: string;
+    amazonUrl: string;
+    imageUrl: string[];
+}
 export default async function Results({searchParams}: {
   searchParams: { info?: string };
 }) {
@@ -10,19 +21,68 @@ export default async function Results({searchParams}: {
         redirect('/');
     }
 
-//   // Parse the info parameter from the URL query string.
-//   // Make sure your info is properly encoded/decoded.
-//   const formData = JSON.parse(searchParams.info);
+    function refresh() {}
 
-//   // Optionally, perform additional asynchronous fetching here if needed.
-//   // e.g., const additionalData = await fetch(...).then(res => res.json());
+    const formData = JSON.parse(info);
 
-//   return (
-//     <div className="p-8">
-//       <h1 className="text-3xl font-bold mb-4">Results</h1>
-//       <pre className="bg-gray-100 p-4 rounded">
-//         <Listings />
-//       </pre>
-//     </div>
-//   );
+    const occasionId = formData.occasion
+    const params = formData.params
+
+    const occasions = ["Birthday", "Graduation", "Anniversary", "Christmas"];
+    const occasionName = occasions[occasionId-1];
+
+    const queryParams = [
+            params.interests,
+            `Age ${params.age}`,
+            params.gender,
+            params.relationship,
+            params.personality,   // Birthday
+            params.fieldOfStudy,  // Graduation
+            params.futurePlans,   // Graduation
+            params.traditions,    // Christmas
+            params.loveLanguage,  // Anniversary
+        ].filter((param)=> {
+            if(param== "" || param == null) return false;
+            return true;
+        })
+
+    console.log(params.budget)
+    
+    const recommendations: Recommendation[] = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: occasionName,
+            query: queryParams.join(','),
+            price: parseInt(params.budget)
+        })
+    }).then((res)=>res.json()).then((data)=> {
+        console.log(data)
+        return data
+    }).then((data: any[])=>{
+        console.log(data)
+        return data.map((entry:any) => {
+            
+            const [name, description] = entry.name.split(/[,|-]/, 2);
+            const salePriceString = `$${entry.salePrice.toFixed(2)}`
+
+            return {
+                name: name,
+                description: description,
+                price: salePriceString,
+                amazonUrl: entry.url,
+                imageUrl: entry.imageUrls
+            };
+        })
+    })
+
+
+    return <div>
+        <div className="pt-20 bg-gray-50 min-h-screen pb-10">
+            <Listings refresh={null} recommendations={recommendations} />
+        </div>
+        <Footer />
+    </div>
 }
