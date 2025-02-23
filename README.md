@@ -19,3 +19,5 @@ With **Presently**, you get **data-driven suggestions** tailored to the recipien
 Special thanks to dotData for hosting MadData25!
 
 ---
+
+Claude 3.5 Sonnet was used during development to help with data parsing and transformation and data wrangling tasks, letting us build a more streamlined and efficient data pipeline.
