@@ -1,6 +1,8 @@
 from supabase import Client, create_client
 from dotenv import load_dotenv
 import os
+from data_cleaning import query_all_from_table
+import pandas as pd
 
 load_dotenv()
 
@@ -9,7 +11,11 @@ supabase = create_client(
     supabase_url=os.getenv("SUPABASE_URL"),
 )
 
+
 def find_categories(query: str, category_list: list) -> list:
+    """
+    Finds the most relevant categories given a user query.
+    """
     from dotenv import load_dotenv
     import os
     from openai import OpenAI
@@ -36,10 +42,13 @@ def find_categories(query: str, category_list: list) -> list:
     )
     response = completion.choices[0].message.content
     print(response)
-    # return ast.literal_eval(response)
+    return ast.literal_eval(response)
 
 
-def feed_LLM():
+def LLM_feed():
+    """
+    Returns a list of all categories from the supabase database.
+    """
     all_data = []
     more = True
     offset = 0
@@ -61,5 +70,55 @@ def feed_LLM():
     return all_data
 
 
+def find_top_products(query: str) -> list:
+    """
+    Finds the top 10 products for each category.
+    """
+    # category_list = LLM_feed()
+    # top_categories = find_categories(query=query, category_list=category_list)
+    top_categories = [
+        "Gift Cards",
+        "Humor & Satire",
+        "Party Supplies",
+        "Toys & Games",
+        "Funny Gifts",
+        "Comedy & Spoken Word",
+        "Boys",
+        "Men",
+        "Family",
+        "Comedy",
+    ]
+
+    all_products = pd.DataFrame(query_all_from_table("products"))
+    all_product_categories = pd.DataFrame(query_all_from_table("product_categories"))
+    all_categories = pd.DataFrame(query_all_from_table("categories"))
+
+    # Category joins
+    category_mapping = all_product_categories.merge(
+        all_categories, left_on="category_id", right_on="id", how="left"
+    )
+    matching_categories = category_mapping[
+        category_mapping["name"].isin(top_categories)
+    ]
+    product_category_counts = (
+        matching_categories.groupby("product_id")
+        .size()
+        .reset_index(name="category_count")
+    )
+
+    # Product joins
+    results = product_category_counts.merge(
+        all_products, left_on="product_id", right_on="id", how="left"
+    )
+    sorted_results = results.sort_values(
+        by=["category_count", "reviewCount"], ascending=[False, False]
+    )
+
+    return sorted_results.head(20).to_dict("records")
+
+
 if __name__ == "__main__":
-    find_categories(query="Birthday, Male, Family, Funny", category_list=feed_LLM())
+    import json
+
+    top_products = find_top_products(query="")
+    print(json.dumps(top_products, indent=4))

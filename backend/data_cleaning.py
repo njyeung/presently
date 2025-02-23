@@ -30,7 +30,10 @@ def generate_products():
     """
     df = pd.read_csv("amazon_com_best_sellers_2025_01_27.csv")
     cleaned_df = (
-        df[["name", "url", "imageUrls", "salePrice"]].copy().drop_duplicates().dropna()
+        df[["name", "url", "imageUrls", "salePrice", "reviewCount"]]
+        .copy()
+        .drop_duplicates()
+        .dropna()
     )
     i = 1
     for index, row in cleaned_df.iterrows():
@@ -52,6 +55,7 @@ def generate_products():
             logging.error(f"Error processing row {index}: {e}")
             continue
     cleaned_df["id"] = cleaned_df["id"].astype(int)
+    cleaned_df["reviewCount"] = cleaned_df["reviewCount"].astype(int)
 
     supabase.table("products").upsert(cleaned_df.to_dict(orient="records")).execute()
 
@@ -164,12 +168,11 @@ def generate_product_categories():
     return product_categories
 
 
-# TODO
 def query_all_from_table(table_name: str):
     all_data = []
     more = True
     offset = 0
-    limit = 1000
+    limit = 10000
     while more:
         list = (
             supabase.table(table_name)
@@ -179,12 +182,13 @@ def query_all_from_table(table_name: str):
             .data
         )
         all_data.extend(list)
+        offset += limit
         if len(list) < limit:
             more = False
     return all_data
 
 
 if __name__ == "__main__":
-    # generate_products()
-    generate_product_categories()
+    generate_products()
+    # generate_product_categories()
     # generate_categories()
