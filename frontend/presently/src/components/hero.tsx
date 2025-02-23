@@ -81,7 +81,7 @@ export default function Hero() {
                             }}
                             />
                         </div>
-                        <div className="hidden md:block md:absolute h-[150px] w-[150px] top-0 -left-[70px]">
+                        <div className="hidden md:block md:absolute h-[150px] w-[150px] -top-[50px] -left-[60px]">
                         <motion.img
                             src={Cake.src} alt="cake" 
                             width={200} height={200}
