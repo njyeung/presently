@@ -50,7 +50,23 @@ export default async function Results({ searchParams }: {searchParams:any}) {
     var a = "";
     var b = 0;
     
-    const test = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently")
+    const test = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: occasionName,
+            query: queryParams.join(','),
+            price: parseInt(params.budget)
+        })
+    }).then((res)=>{
+        b = res.status
+        return res;
+    })
+
+    console.log(test)
+    
     // const recommendations: Recommendation[] = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
     //     method: "POST",
     //     headers: {
