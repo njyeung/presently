@@ -61,7 +61,7 @@ const occasions = [
     }
 ];
 
-export default function Ocassions() {
+export default function Browse() {
     const router = useRouter()
     return <section id="ocassions" className="pt-10 pb-12 bg-gray-50">
       <div className="contain mx-auto px-4">
