@@ -31,7 +31,7 @@ df["breadcrumbs"] = df["breadcrumbs"].apply(clean_breadcrumbs)
 nlp = spacy.load("en_core_web_lg")
 
 # get a vector value for each row
-vector_array = np.zeros(shape = (26000, 300))
+vector_array = np.zeros(shape = (25874, 300))
 hashmap = dict()
 for index, row in df.iterrows():
     try:
