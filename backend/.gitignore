@@ -1,3 +1,6 @@
 .venv
 /gensim-data
 GoogleNews-vectors-negative300*
+*.csv
+lambda_package
+.env
