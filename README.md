@@ -12,7 +12,7 @@ Data used for this application.
 
 ---
 
-## Frontend
+## Frontend & Backend
 Some of the code snippets, design ideas, and best practices used in Presently were developed with the assistance of ChatGPT and Claude Sonnet. This collaboration helped streamline the implementation of:
 
 - Responsive Layouts & Tailwind CSS: Guidance on creating adaptive container padding and a flexible grid system.
