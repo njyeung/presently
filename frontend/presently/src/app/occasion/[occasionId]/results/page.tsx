@@ -45,43 +45,49 @@ export default async function Results({ searchParams }: {searchParams:any}) {
             if(param== "" || param == null) return false;
             return true;
         })
-    
-    await delay(3000);
 
-    // const recommendations: Recommendation[] = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify({
-    //         title: occasionName,
-    //         query: queryParams.join(','),
-    //         price: parseInt(params.budget)
-    //     })
-    // }).then((res)=>res.json()).then((data)=> {
-    //     console.log(data)
-    //     return data
-    // }).then((data: any[])=>{
-    //     console.log(data)
-    //     return data.map((entry:any) => {
+
+    var a = 0;
+    var b = 0;
+
+    const recommendations: Recommendation[] = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: occasionName,
+            query: queryParams.join(','),
+            price: parseInt(params.budget)
+        })
+    }).then((res)=>{
+        b = res.status
+        return res;
+    })
+    .then((res)=>res.json()).then((data)=> {
+        a = data
+        return data
+    }).then((data: any[])=>{
+        console.log(data)
+        return data.map((entry:any) => {
             
-    //         const [name, description] = entry.name.split(/[,|-]/, 2);
-    //         const salePriceString = `$${entry.salePrice.toFixed(2)}`
+            const [name, description] = entry.name.split(/[,|-]/, 2);
+            const salePriceString = `$${entry.salePrice.toFixed(2)}`
 
-    //         return {
-    //             name: name,
-    //             description: description,
-    //             price: salePriceString,
-    //             amazonUrl: entry.url,
-    //             imageUrl: entry.imageUrls
-    //         };
-    //     })
-    // })
+            return {
+                name: name,
+                description: description,
+                price: salePriceString,
+                amazonUrl: entry.url,
+                imageUrl: entry.imageUrls
+            };
+        })
+    })
     
-    const recommendations = [ 
+    const dummy = [ 
         {
-            name: "asdasdasd",
-            description: info,
+            name: b,
+            description: a,
             price: "0",
             amazonUrl: "https://amazon.com/smartphone-x",
             imageUrl: [
@@ -129,7 +135,7 @@ export default async function Results({ searchParams }: {searchParams:any}) {
                     </span>
                 </div>
                 :
-                <Listings refresh={null} recommendations={recommendations} />
+                <Listings refresh={null} recommendations={dummy} />
             }
         </div>
         <Footer />
