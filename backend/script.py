@@ -1,8 +1,8 @@
 from supabase import Client, create_client
 from dotenv import load_dotenv
 import os
-from data_cleaning import query_all_from_table
 import pandas as pd
+import json
 
 load_dotenv()
 
@@ -10,6 +10,26 @@ supabase = create_client(
     supabase_key=os.getenv("SUPABASE_SECRET_KEY"),
     supabase_url=os.getenv("SUPABASE_URL"),
 )
+
+def query_all_from_table(table_name: str):
+    """ Returns all data from a given table in the supabase database."""
+    all_data = []
+    more = True
+    offset = 0
+    limit = 10000
+    while more:
+        list = (
+            supabase.table(table_name)
+            .select("*")
+            .range(offset, offset + limit - 1)
+            .execute()
+            .data
+        )
+        all_data.extend(list)
+        offset += limit
+        if len(list) < limit:
+            more = False
+    return all_data
 
 
 def find_categories(query: str, category_list: list) -> list:
@@ -115,48 +135,46 @@ if __name__ == "__main__":
 def lambda_handler(event, context):
     try:
         # Extract query from request body
-        body = json.loads(event.get("body", "{}"))
-        query = body.get("query", "")
-
+        body = json.loads(event.get('body', '{}'))
+        query = body.get('query', '')
+        
         if not query:
             return {
-                "statusCode": 400,
-                "headers": {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
+                'statusCode': 400,
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
-                "body": json.dumps(
-                    {"error": "Query parameter is required in request body"}
-                ),
+                'body': json.dumps({'error': 'Query parameter is required in request body'})
             }
-
+        
         # Get product recommendations
         products = find_top_products(query)
-
+        
         # Return successful response
         return {
-            "statusCode": 200,
-            "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
+            'statusCode': 200,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
             },
-            "body": json.dumps(products),
+            'body': json.dumps(products)
         }
     except json.JSONDecodeError:
         return {
-            "statusCode": 400,
-            "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
+            'statusCode': 400,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
             },
-            "body": json.dumps({"error": "Invalid JSON in request body"}),
+            'body': json.dumps({'error': 'Invalid JSON in request body'})
         }
     except Exception as e:
         return {
-            "statusCode": 500,
-            "headers": {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
+            'statusCode': 500,
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
             },
-            "body": json.dumps({"error": str(e)}),
+            'body': json.dumps({'error': str(e)})
         }
