@@ -38,7 +38,7 @@ export default function Hero() {
                         animate={{
                             translateY: [-30, 30],
                             rotate: [-5,2]
-                          }}
+                        }}
                         transition={{
                         repeat: Infinity,
                         repeatType: "mirror",

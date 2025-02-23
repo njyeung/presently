@@ -5,7 +5,6 @@ import Ocassions from "@/components/Ocassions";
 import { Footer } from "@/components/Footer";
 export default function Home() {
   return <>
-    <Navbar />
     <Hero />
     <Ocassions />
     <Footer />
