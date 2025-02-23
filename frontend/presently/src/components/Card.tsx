@@ -47,23 +47,23 @@ export default function Card({recommendation, isGold, refresh} : {recommendation
         <div className="flex flex-row md:gap-5 gap-2 justify-between">
             <div className="p-5 flex-1">
                 <div className="flex flex-col h-full">
-                    <h2 className="md:text-3xl text-xl font-semibold">{recommendation.name}</h2>
+                    <span className="flex flex-row items-center  mt-2 gap-4">
+                        <GoldStar className="cursor-pointer" handleClick={handleClick} isGold={isGold}></GoldStar>
+                        <h2 className="md:text-3xl text-xl font-semibold">{recommendation.name}</h2>
+                    </span>
+                
                     <div className="flex flex-row items-center h-full md:gap-5 gap-2">
-                        <p className="description">
+                        <p className="text-gray-600 description">
                             {recommendation.description}
                         </p>
                         <h2 className="text-4xl bg-gradient text-transparent bg-clip-text font-bold">
                             {recommendation.price}
                         </h2>
                     </div>
-                    <span className="flex flex-row items-center  mt-2 gap-4">
-                        <GoldStar className="cursor-pointer" handleClick={handleClick} isGold={isGold}></GoldStar>
-                        
-                        <Link href={recommendation.amazonUrl} className={twMerge(buttonVariants({ variant: "default" }), " p-3 text-lg max-w-[200px]")}>
-                            Purchase Now
-                            <ArrowRight></ArrowRight>
-                        </Link>
-                    </span>
+                    <Link href={recommendation.amazonUrl} className={twMerge(buttonVariants({ variant: "default" }), " p-3 text-lg max-w-[200px]")}>
+                        Purchase Now
+                        <ArrowRight></ArrowRight>
+                    </Link>
                 </div>
             </div>
             <Carousel>

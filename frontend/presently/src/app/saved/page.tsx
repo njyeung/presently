@@ -17,14 +17,14 @@ export default function Saved() {
             setSavedListings(JSON.parse(listings));
         }
     }
-    return <>
+    return <section className="bg-gray-50">
         {savedListings.length != 0 ? <div>
-        <div className="pt-20 bg-gray-50 min-h-screen pb-10">
-            <Listings refresh={getStarred} recommendations={savedListings} />
-        </div>
+            <div className="pt-20 min-h-screen pb-10">
+                <Listings refresh={getStarred} recommendations={savedListings} />
+            </div>
         <Footer />
         </div> : <div>
-            <div className="contain py-20 bg-gray-50 min-h-screen">
+            <div className="contain py-20  min-h-screen">
                 <div className="flex justify-center">
                     <span className="flex flex-row items-center mt-2 gap-5">
                         <GoldStar isGold={true}></GoldStar>
@@ -35,6 +35,6 @@ export default function Saved() {
             <Footer />    
         </div>
         }
-    </>
+    </section>
     
 }
