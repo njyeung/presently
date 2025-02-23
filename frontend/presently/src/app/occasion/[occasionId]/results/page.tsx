@@ -136,7 +136,7 @@ export default async function Results({ searchParams }: {searchParams:any}) {
                     </span>
                 </div>
                 :
-                <Listings refresh={null} recommendations={dummy} />
+                <Listings refresh={null} recommendations={recommendations} />
             }
         </div>
         <Footer />
