@@ -5,6 +5,13 @@ With **Presently**, you get **data-driven suggestions** tailored to the recipien
 
 ---
 
+## Data
+Data used for this application.
+
+- https://github.com/octaprice/ecommerce-product-dataset
+
+---
+
 ## Frontend
 Some of the code snippets, design ideas, and best practices used in Presently were developed with the assistance of ChatGPT. This collaboration helped streamline the implementation of:
 
@@ -18,7 +25,7 @@ We appreciate the AI's support in accelerating our development process while ens
 
 ---
 
-## 🌟 Features
+## Features
 
 - **Personalized Suggestions**: AI-powered recommendations based on recipient preferences.
 - **Diverse Gift Categories**: Explore gifts for everyone on all types of occasions.
@@ -27,7 +34,7 @@ We appreciate the AI's support in accelerating our development process while ens
 
 ---
 
-## 🙌 Acknowledgments
+## Acknowledgments
 
 Special thanks to dotData for hosting MadData25!
 
