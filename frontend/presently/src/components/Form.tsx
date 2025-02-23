@@ -284,15 +284,9 @@ export default function Form(props: any) {
             </motion.div>
             
             { alert ? <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
+                initial= {{ opacity: 1, translateY: 0}}
+                animate={{ opacity: 0, translateY: 5}}
                 transition={{ duration: 0.3, delay: 0 }}
-                
-                variants={{
-                    visible: { opacity: 1, translateY: 0},
-                    hidden: { opacity: 0, translateY: 5}
-                }}
             >
                 <div className="mt-5 w-full h-9 bg-red-600 flex text-white rounded-xl p-2 justify-center items-center">
                     <p>Please fill in all required fields.</p>
