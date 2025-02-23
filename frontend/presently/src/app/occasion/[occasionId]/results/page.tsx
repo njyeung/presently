@@ -49,40 +49,40 @@ export default async function Results({ searchParams }: {searchParams:any}) {
 
     var a = "";
     var b = 0;
-
-    const recommendations: Recommendation[] = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            title: occasionName,
-            query: queryParams.join(','),
-            price: parseInt(params.budget)
-        })
-    }).then((res)=>{
-        b = res.status
-        return res;
-    })
-    .then((res)=>res.json()).then((data)=> {
-        a = JSON.stringify(data)
-        return data
-    }).then((data: any[])=>{
-        console.log(data)
-        return data.map((entry:any) => {
+    const recommendations = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently")
+    // const recommendations: Recommendation[] = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json"
+    //     },
+    //     body: JSON.stringify({
+    //         title: occasionName,
+    //         query: queryParams.join(','),
+    //         price: parseInt(params.budget)
+    //     })
+    // }).then((res)=>{
+    //     b = res.status
+    //     return res;
+    // })
+    // .then((res)=>res.json()).then((data)=> {
+    //     a = JSON.stringify(data)
+    //     return data
+    // }).then((data: any[])=>{
+    //     console.log(data)
+    //     return data.map((entry:any) => {
             
-            const [name, description] = entry.name.split(/[,|-]/, 2);
-            const salePriceString = `$${entry.salePrice.toFixed(2)}`
+    //         const [name, description] = entry.name.split(/[,|-]/, 2);
+    //         const salePriceString = `$${entry.salePrice.toFixed(2)}`
 
-            return {
-                name: name,
-                description: description,
-                price: salePriceString,
-                amazonUrl: entry.url,
-                imageUrl: entry.imageUrls
-            };
-        })
-    })
+    //         return {
+    //             name: name,
+    //             description: description,
+    //             price: salePriceString,
+    //             amazonUrl: entry.url,
+    //             imageUrl: entry.imageUrls
+    //         };
+    //     })
+    // })
     
     const dummy: Recommendation[] = [ 
         {
