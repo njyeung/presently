@@ -214,10 +214,10 @@ export default function Form(props: any) {
                     </label>
                     <input
                         type="text"
-                        name="traditions"
+                        name="loveLanguage"
                         value={formData.params.loveLanguage}
                         onChange={handleChange}
-                        placeholder="e.g. holiday customs, family traditions..."
+                        placeholder="e.g. "
                         className="w-full border rounded p-2 bg-gray-200"
                     />
                     </div>
