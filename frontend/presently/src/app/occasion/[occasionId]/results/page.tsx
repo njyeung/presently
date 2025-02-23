@@ -49,7 +49,8 @@ export default async function Results({ searchParams }: {searchParams:any}) {
 
     var a = "";
     var b = 0;
-    const recommendations = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently")
+    
+    const test = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently")
     // const recommendations: Recommendation[] = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
     //     method: "POST",
     //     headers: {
@@ -84,7 +85,7 @@ export default async function Results({ searchParams }: {searchParams:any}) {
     //     })
     // })
     
-    const dummy: Recommendation[] = [ 
+    const recommendations: Recommendation[] = [ 
         {
             name: b.toString(),
             description: a.toString(),
