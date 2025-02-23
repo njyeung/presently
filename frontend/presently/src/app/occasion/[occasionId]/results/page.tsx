@@ -47,8 +47,8 @@ export default async function Results({ searchParams }: {searchParams:any}) {
         })
 
 
-    var a = 0;
-    var b = 0;
+    var a = "";
+    var b = "";
 
     const recommendations: Recommendation[] = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
         method: "POST",
@@ -61,11 +61,11 @@ export default async function Results({ searchParams }: {searchParams:any}) {
             price: parseInt(params.budget)
         })
     }).then((res)=>{
-        b = res.status
+        b = res.status.toString()
         return res;
     })
     .then((res)=>res.json()).then((data)=> {
-        a = data
+        a = JSON.stringify(data)
         return data
     }).then((data: any[])=>{
         console.log(data)
