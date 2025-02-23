@@ -118,6 +118,7 @@ def find_top_products(title: str, query: str, price: float = None) -> list:
         all_products = all_products[
             (all_products["salePrice"] >= price_min)
             & (all_products["salePrice"] <= price_max)
+            & (all_products["salePrice"] <= price)
         ]
 
     # Category joins with productCount and importance included
@@ -178,14 +179,14 @@ def find_top_products(title: str, query: str, price: float = None) -> list:
 
     # Get initial top 10 products
     initial_results = sorted_results.head(10).to_dict("records")
-    
+
     # Refine to top 5 most relevant products
-    final_results = refine_products(initial_results, title, query)
-    
+    final_results = refine_products(initial_results, title, query, price)
+
     return final_results
 
 
-def refine_products(products: list, title: str, query: str) -> list:
+def refine_products(products: list, title: str, query: str, price: float) -> list:
     """
     Uses GPT to analyze and select the top 5 most relevant products from the initial 10 products.
     """
@@ -201,7 +202,7 @@ def refine_products(products: list, title: str, query: str) -> list:
             "name": p["name"],
             "categories": p["categories"],
             "price": p["salePrice"],
-            "id": p["id"]
+            "id": p["id"],
         }
         product_info.append(info)
 
@@ -210,32 +211,33 @@ def refine_products(products: list, title: str, query: str) -> list:
         messages=[
             {
                 "role": "system",
-                "content": "You are a helpful assistant that analyzes product relevance for gift recommendations."
+                "content": "You are a helpful assistant that analyzes product relevance for gift recommendations.",
             },
             {
                 "role": "user",
-                "content": f"""For the occasion '{title}' and search criteria '{query}', analyze these products:
+                "content": f"""For the occasion '{title}', search criteria '{query}' and given price {price}, analyze these products:
                     {product_info}
                     
-                    Select the 5 most relevant products considering:
+                    Select the FIVE most relevant products considering:
                     1. How well the product matches the occasion
                     2. How well it matches the search criteria
                     3. How appropriate the product categories are
+                    4. How closely it matches the price
                     
                     Return only a Python list of product IDs, ordered by relevance.
-                    No explanation needed, just the list of IDs without the python indentation block."""
-            }
+                    No explanation needed, just the list of IDs without the python indentation block.""",
+            },
         ],
-        temperature=0.7
+        temperature=0.7,
     )
-    
+
     selected_ids = ast.literal_eval(completion.choices[0].message.content)
-    
+
     # Filter and sort the original products list based on selected IDs
     selected_products = [p for p in products if p["id"] in selected_ids]
     # Sort products to match the order of selected_ids
     selected_products.sort(key=lambda x: selected_ids.index(x["id"]))
-    
+
     return selected_products
 
 
@@ -255,7 +257,7 @@ def lambda_handler(event, context):
         title = body.get("title", "")
         query = body.get("query", "")
         price = body.get("price", None)
-
+        price = float(price) if price is not None else None
         if not query:
             return {
                 "statusCode": 400,
