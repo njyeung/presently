@@ -44,7 +44,16 @@
     @apply bg-gradient-to-br from-purple-600 to-blue-500 text-white;
     transition: 1s ease;
   }
+  .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
   
+    line-height: 5; /* Adjust line height to prevent clipping */
+    max-height: 5rem; /* Matches line-height to avoid cut-off */
+  }
   .description {
     overflow: hidden;
     text-overflow: ellipsis;

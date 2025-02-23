@@ -49,7 +49,7 @@ export default function Card({recommendation, isGold, refresh} : {recommendation
                 <div className="flex flex-col h-full">
                     <span className="flex flex-row items-center  mt-2 gap-4">
                         <GoldStar className="cursor-pointer" handleClick={handleClick} isGold={isGold}></GoldStar>
-                        <h2 className="md:text-3xl text-xl font-semibold">{recommendation.name}</h2>
+                        <h2 className="md:text-3xl text-xl font-semibold title">{recommendation.name}</h2>
                     </span>
                 
                     <div className="flex flex-row items-center h-full md:gap-5 gap-2">

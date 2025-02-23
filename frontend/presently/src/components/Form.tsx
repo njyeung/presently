@@ -82,7 +82,6 @@ export default function Form(props: any) {
             setAlert(true);
             return;
           }
-        console.log("SUBMIT")
         props.submit(formData);
     }
 
@@ -90,30 +89,18 @@ export default function Form(props: any) {
         <section className="bg-gray-50 py-20 h-screen">
             <div className="max-w-2xl mx-auto contain">
             <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
+                initial={{opacity: 0,  transform: "translateY(8px)"}}
+                animate={{opacity: 1, transform: "translateY(0px)"}}
                 transition={{ duration: 0.5, delay: 0 }}
-                
-                variants={{
-                    visible: { opacity: 1, translateY: 0},
-                    hidden: { opacity: 0, translateY: 8}
-                }}
             >
                 <h1 className="text-3xl font-bold mb-6">Find a PresentLy 
                     <span className="bg-gradient text-transparent bg-clip-text"> {occasions[occasionId-1]} </span>
                 Gift</h1>
             </motion.div>
             <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
+                initial={{opacity: 0,  transform: "translateY(12px)"}}
+                animate={{opacity: 1, transform: "translateY(0px)"}}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                
-                variants={{
-                    visible: { opacity: 1, translateY: 0},
-                    hidden: { opacity: 0, translateY: 12}
-                }}
             >
                 <form className="space-y-4" onSubmit={handleSubmit}>
                     {/* Global Parameters */}

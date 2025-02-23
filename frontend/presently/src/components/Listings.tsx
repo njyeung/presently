@@ -38,15 +38,9 @@ export default function Listings({ recommendations, refresh }: { recommendations
                 { recommendations.map((recommendation: Recommendation, index) => 
                     <div key={index}>
                         <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index*0.2 }}
-                            
-                            variants={{
-                                visible: { opacity: 1, transform: "translateY(0px)"},
-                                hidden: { opacity: 0,  transform: "translateY(12px)"}
-                            }}
+                            initial={{opacity: 0,  transform: "translateY(12px)"}}
+                            animate={{opacity: 1, transform: "translateY(0px)"}}
+                            transition={{ duration: 0.5, delay: index*0.2}}
                         >
                         <Card recommendation={recommendation} isGold={goldNames.includes(recommendation.name)} refresh={getStarred} />
                         </motion.div>
