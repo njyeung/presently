@@ -4,10 +4,11 @@ import Listings from "@/components/Listings"
 export default async function Results({searchParams}: {
   searchParams: { info?: string };
 }) {
-//   // If there's no info query parameter, redirect to a default page.
-//   if (!searchParams.info) {
-//     redirect('/');
-//   }
+    const { info } = await searchParams;
+    // If there's no info query parameter, redirect to a default page.
+    if (!info) {
+        redirect('/');
+    }
 
 //   // Parse the info parameter from the URL query string.
 //   // Make sure your info is properly encoded/decoded.
