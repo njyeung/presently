@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import Listings from "@/components/Listings"
 import { Footer } from '@/components/Footer';
 import GoldStar from "@/assets/gold-star"
+import { describe } from 'node:test';
 function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -14,8 +15,9 @@ interface Recommendation {
     amazonUrl: string;
     imageUrl: string[];
 }
-export default async function Results({searchParams}: {searchParams:any}) {
+export default async function Results({ searchParams }: {searchParams:any}) {
     const { info } = await searchParams;
+
     // If there's no info query parameter, redirect to a default page.
     if (!info) {
         redirect('/');
@@ -25,7 +27,7 @@ export default async function Results({searchParams}: {searchParams:any}) {
 
     const occasionId = formData.occasion
     const params = formData.params
-
+    
     const occasions = ["Birthday", "Graduation", "Anniversary", "Christmas"];
     const occasionName = occasions[occasionId-1];
 
@@ -43,8 +45,6 @@ export default async function Results({searchParams}: {searchParams:any}) {
             if(param== "" || param == null) return false;
             return true;
         })
-
-    console.log(params.budget)
     
     await delay(3000);
 
@@ -78,7 +78,17 @@ export default async function Results({searchParams}: {searchParams:any}) {
     //     })
     // })
     
-    const recommendations = [
+    const recommendations = [ 
+        {
+            name: "asdasdasd",
+            description: info,
+            price: "0",
+            amazonUrl: "https://amazon.com/smartphone-x",
+            imageUrl: [
+                "https://dummyimage.com/400x300/000/fff&text=Smartphone+X",
+                "https://dummyimage.com/400x300/000/fff&text=Alternate+View"
+            ],
+        },
         {
           name: "Smartphone X",
           description: "The latest smartphone with cutting-edge features and a stunning display.",
@@ -121,7 +131,6 @@ export default async function Results({searchParams}: {searchParams:any}) {
                 :
                 <Listings refresh={null} recommendations={recommendations} />
             }
-            
         </div>
         <Footer />
     </div>

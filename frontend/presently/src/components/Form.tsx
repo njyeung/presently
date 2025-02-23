@@ -42,7 +42,6 @@ export default function Form(props: any) {
     
     const handleSubmit = (e:any) => {
         e.preventDefault();
-        console.log(formData.params)
         const {
             age,
             gender,
