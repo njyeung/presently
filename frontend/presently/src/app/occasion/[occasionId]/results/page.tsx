@@ -12,10 +12,8 @@ interface Recommendation {
     amazonUrl: string;
     imageUrl: string[];
 }
-export default async function Results({searchParams}: {
-  searchParams: { info?: string };
-}) {
-    const { info } = await searchParams;
+export default async function Results({searchParams}: {searchParams:any}) {
+    const { info } = searchParams;
     // If there's no info query parameter, redirect to a default page.
     if (!info) {
         redirect('/');
