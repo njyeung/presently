@@ -48,7 +48,7 @@ export default async function Results({ searchParams }: {searchParams:any}) {
 
 
     var a = "";
-    var b = "";
+    var b = 0;
 
     const recommendations: Recommendation[] = await fetch("https://6nf46p3uf7.execute-api.us-west-1.amazonaws.com/presently", {
         method: "POST",
