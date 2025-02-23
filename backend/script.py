@@ -74,20 +74,8 @@ def find_top_products(query: str) -> list:
     """
     Finds the top 10 products for each category.
     """
-    # category_list = LLM_feed()
-    # top_categories = find_categories(query=query, category_list=category_list)
-    top_categories = [
-        "Gift Cards",
-        "Humor & Satire",
-        "Party Supplies",
-        "Toys & Games",
-        "Funny Gifts",
-        "Comedy & Spoken Word",
-        "Boys",
-        "Men",
-        "Family",
-        "Comedy",
-    ]
+    category_list = LLM_feed()
+    top_categories = find_categories(query=query, category_list=category_list)
 
     all_products = pd.DataFrame(query_all_from_table("products"))
     all_product_categories = pd.DataFrame(query_all_from_table("product_categories"))
@@ -120,5 +108,55 @@ def find_top_products(query: str) -> list:
 if __name__ == "__main__":
     import json
 
-    top_products = find_top_products(query="")
+    top_products = find_top_products(query="Birthday,Male,16,Gifts,Car")
     print(json.dumps(top_products, indent=4))
+
+
+def lambda_handler(event, context):
+    try:
+        # Extract query from request body
+        body = json.loads(event.get("body", "{}"))
+        query = body.get("query", "")
+
+        if not query:
+            return {
+                "statusCode": 400,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                "body": json.dumps(
+                    {"error": "Query parameter is required in request body"}
+                ),
+            }
+
+        # Get product recommendations
+        products = find_top_products(query)
+
+        # Return successful response
+        return {
+            "statusCode": 200,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+            },
+            "body": json.dumps(products),
+        }
+    except json.JSONDecodeError:
+        return {
+            "statusCode": 400,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+            },
+            "body": json.dumps({"error": "Invalid JSON in request body"}),
+        }
+    except Exception as e:
+        return {
+            "statusCode": 500,
+            "headers": {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+            },
+            "body": json.dumps({"error": str(e)}),
+        }
