@@ -8,10 +8,12 @@ With **Presently**, you get **data-driven suggestions** tailored to the recipien
 ## Frontend
 Some of the code snippets, design ideas, and best practices used in Presently were developed with the assistance of ChatGPT. This collaboration helped streamline the implementation of:
 
-Responsive Layouts & Tailwind CSS: Guidance on creating adaptive container padding and a flexible grid system.
-Dynamic Animations: Examples using Framer Motion for image scaling and animation effects.
-Next.js Routing & Data Fetching: Best practices for working with dynamic routes and asynchronous API calls.
-Creation of useless pages: Specifically the of About page
+- Responsive Layouts & Tailwind CSS: Guidance on creating adaptive container padding and a flexible grid system.
+- Dynamic Animations: Examples using Framer Motion for image scaling and animation effects.
+- Next.js Routing & Data Fetching: Best practices for working with dynamic routes and asynchronous API calls.
+- Creation of useless pages: Specifically the of About page
+- Generation of text for landing page
+
 We appreciate the AI's support in accelerating our development process while ensuring robust and scalable code.
 
 ---
