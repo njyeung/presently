@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import Listings from "@/components/Listings"
 import { Footer } from '@/components/Footer';
-
+import GoldStar from "@/assets/gold-star"
 function delay(ms: number) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -81,7 +81,17 @@ export default async function Results({searchParams}: {
 
     return <div>
         <div className="pt-20 bg-gray-50 min-h-screen pb-10">
-            <Listings refresh={null} recommendations={recommendations} />
+            { recommendations.length == 0 ? 
+                <div className="flex justify-center">
+                    <span className="flex flex-row items-center mt-2 gap-5">
+                        <GoldStar isGold={true}></GoldStar>
+                        <p className="text-gray-500 text-lg">No results! Try a different query!</p>
+                    </span>
+                </div>
+                :
+                <Listings refresh={null} recommendations={recommendations} />
+            }
+            
         </div>
         <Footer />
     </div>
