@@ -32,7 +32,6 @@ export default async function Results({searchParams}: {
     const occasionName = occasions[occasionId-1];
 
     const queryParams = [
-            occasionName,
             params.age,
             params.gender,
             params.interests,
@@ -56,6 +55,7 @@ export default async function Results({searchParams}: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
+            title: occasionName,
             query: queryParams.join(',')
         })
     }).then((res)=>res.json()).then((data: any[])=>{
