@@ -19,7 +19,7 @@ def clean_breadcrumbs(breadcrumbs):
         cleaned = [" ".join(re.findall(r'[A-Za-z]+', item["name"])) for item in breadcrumb_list]
 
         # Join back into a string
-        cleaned = " ".join(cleaned)
+        cleaned = ",".join(cleaned)
         return cleaned
     
     except Exception:
@@ -36,30 +36,33 @@ hashmap = dict()
 for index, row in df.iterrows():
     try:
         # get set of vectors for the "breadcrumbs" words
-        nlps = np.zeroes()
-#        for i in df.loc[index,["breadcrumbs"]].to_string().split():
+        ar = df.loc[index,["breadcrumbs"]].to_string().split(',')
+        n = len(ar)
+        # avg the vectors for 1st and last category
+        summation = 0
+        count = 0
+        for i in ar[0]:
+            if i not in hashmap:
+                hashmap[i] = nlp(i).vector
+            summation += hashmap[i]
+            count+=1
+        for i in ar[-1]:
+            if i not in hashmap:
+                hashmap[i] = nlp(i).vector
+            summation += hashmap[i]
+            count+=1
+        # average out
+        summation = summation / count
+        # store each in numpy array
+        vector_array[index] = summation
 
-        doc = nlp((df.loc[index,["breadcrumbs"]]).to_string())
-        n = len(df.loc[index,["breadcrumbs"]].to_string().split())
-
-        summation = doc[0].vector
-        # summation is vector for the row 0 of "breadcrumbs" column
-        for i in range(n-2, n):
-            if doc[i] not in hashmap:
-                # the average vector for the position
-                t = 0
-                for token in doc:
-                    t += 1
-                # get the average
-                hashmap[doc[i]] = doc[i].vector / t
-            summation += hashmap[doc[i]]
-        vector_array[index] = summation/2
         if index%500 == 0:
             print(index)
-    except:
+    except Exception as e:
+        error_message = str(e)
         if index%500 == 0:
+            print("Potential Error:\n" + error_message)
             print(index)
-        print("Potential Error")
         continue
 
 # add the new column
