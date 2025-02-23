@@ -1,5 +1,6 @@
 "use client"
 
+import { Footer } from "@/components/Footer";
 import Form from "@/components/Form"
 import { useParams } from "next/navigation";
 import { useRouter } from 'next/navigation'
@@ -28,5 +29,6 @@ export default function Occasion() {
 
     return <>
         <Form submit={(e:any)=>{onSubmit(e)}} occasionId={occasionIdNumber} />
+        <Footer />
     </>
 }

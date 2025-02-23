@@ -4,6 +4,7 @@ import DateNight from "@/assets/datenight.jpg"
 import Birthday from "@/assets/birthday.png"
 import Graduation from "@/assets/graduation.jpg"
 import Christmas from "@/assets/christmas.jpg"
+
 import { useRouter } from 'next/navigation'
 
 const occasions = [
@@ -30,23 +31,12 @@ const occasions = [
     title: "Christmas",
     description: "Make the holidays magical with our curated picks.",
     image: Christmas,
-  },
-  {
-    id: 5,
-    title: "Christmas",
-    description: "Make the holidays magical with our curated picks.",
-    image: Christmas,
-  },
-  {
-    id: 6,
-    title: "Christmas",
-    description: "Make the holidays magical with our curated picks.",
-    image: Christmas,
   }
 ];
 
-export default function Ocassions() {
+export default function Occasions() {
     const router = useRouter()
+
     return <section id="ocassions" className="pt-10 pb-12 bg-gray-50">
       <div className="contain mx-auto px-4">
         <h2 className="text-3xl font-bold mb-2">Explore Occasions</h2>

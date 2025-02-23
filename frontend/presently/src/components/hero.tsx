@@ -5,14 +5,24 @@ import Image from "next/image"
 import { twMerge } from "tailwind-merge"
 import ArrowRight from "@/assets/arrow-right";
 import PresentBox from "@/assets/PresentBox.png"
+import GraduationCap from "@/assets/graduation-cap.png"
 import { buttonVariants } from "@/components/ui/button"
-import {motion} from "framer-motion"
-
+import { motion, useScroll, useTransform, useMotionValueEvent} from "framer-motion"
+import { useRef } from "react";
+import Cake from "@/assets/cake.png"
 export default function Hero() {
-    return <section className="md:pt-10 pt-20 pb-20 bg-gradient">
+    const heroRef = useRef(null);
+
+    const scroll = useScroll({
+    target: heroRef,
+    offset: ["start end", "end start"]
+    });
+    const translateY = useTransform(scroll.scrollYProgress, [0,1], [150, -150])
+
+    return <section id="hero" className="md:pt-10 pt-20 pb-20 bg-gradient">
         <div className="contain">
             <div className="flex md:flex-row flex-col items-center gap-5 justify-center">
-                <div className="max-w-[500px]">
+                <div className="max-w-[500px] z-40">
                     <motion.div 
                         initial="hidden"
                         whileInView="visible"
@@ -66,24 +76,58 @@ export default function Hero() {
                     </motion.div>
                     
                 </div>
-                <div className="mt-10 md:h-[648px] h-[400px] relative flex items-center justify-center">
-                    <div className="w-[320px] md:w-[500px]">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7, delay: 0.2 }}
+                    
+                    variants={{
+                        visible: { opacity: 1},
+                        hidden: { opacity: 0}
+                    }}
+                >
+                    <div className="mt-10 md:h-[648px] h-[400px] relative flex items-center justify-center">
+                        <div className="w-[320px] md:w-[500px] z-30 flex justify-center items-center">
+                            <motion.img
+                            src={PresentBox.src} alt="present box" 
+                            width={400} height={400}
+                            animate={{
+                                translateY: [-30, 30],
+                                rotate: [-5,2]
+                            }}
+                            transition={{
+                            repeat: Infinity,
+                            repeatType: "mirror",
+                            duration: 3,
+                            ease: "easeInOut",
+                            }}
+                            />
+                        </div>
+                        <div className="hidden md:block md:absolute h-[150px] w-[150px] top-0 -left-[70px]">
                         <motion.img
-                        src={PresentBox.src} alt="present box" 
-                        width={500} height={500}
-                        animate={{
-                            translateY: [-30, 30],
-                            rotate: [-5,2]
-                        }}
-                        transition={{
-                        repeat: Infinity,
-                        repeatType: "mirror",
-                        duration: 3,
-                        ease: "easeInOut",
-                        }}
+                            src={Cake.src} alt="cake" 
+                            width={200} height={200}
+                            style={{
+                                translateY: translateY,
+                            }}
                         />
+                        </div>
+                        <div className="hidden md:block md:absolute h-[350px] w-[350px] top-[580px] -right-[120px]">
+                            <motion.img 
+                                src={GraduationCap.src} alt="graduation cap" 
+                                width={350} height={350}
+
+                                style={{
+                                    rotate: -30,
+                                    translateY: translateY
+                                }}
+                            />
+                        </div>
                     </div>
-                </div>
+                </motion.div>
+                
+                
             </div>
         </div>
     </section>

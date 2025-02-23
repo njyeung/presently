@@ -23,14 +23,18 @@ export default function Saved() {
             <Listings refresh={getStarred} recommendations={savedListings} />
         </div>
         <Footer />
-        </div> : <div className="contain py-20">
-            <div className="flex justify-center">
-                <span className="flex flex-row items-center mt-2 gap-5">
-                    <GoldStar isGold={true}></GoldStar>
-                    <p className="text-gray-500 text-lg">No saved listings yet. Start adding some!</p>
-                </span>
+        </div> : <div>
+            <div className="contain py-20 bg-gray-50 min-h-screen">
+                <div className="flex justify-center">
+                    <span className="flex flex-row items-center mt-2 gap-5">
+                        <GoldStar isGold={true}></GoldStar>
+                        <p className="text-gray-500 text-lg">No saved listings yet. Start adding some!</p>
+                    </span>
+                </div>
             </div>
-        </div>}
+            <Footer />    
+        </div>
+        }
     </>
     
 }

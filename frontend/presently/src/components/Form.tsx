@@ -91,7 +91,7 @@ export default function Form(props: any) {
             <div className="max-w-2xl mx-auto contain">
             <h1 className="text-3xl font-bold mb-6">Find a PresentLy 
                 <span className="bg-gradient text-transparent bg-clip-text"> {occasions[occasionId-1]} </span>
-            gift</h1>
+            Gift</h1>
             <form className="space-y-4" onSubmit={handleSubmit}>
                 {/* Global Parameters */}
                 <div>

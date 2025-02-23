@@ -79,7 +79,7 @@ export default async function Results({searchParams}: {
 
     // Optionally, perform additional asynchronous fetching here if needed.
     // e.g., const additionalData = await fetch(...).then(res => res.json());
-    await delay(3000);
+    await delay(5000);
 
 
     return <div>

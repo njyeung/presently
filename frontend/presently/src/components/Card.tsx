@@ -57,7 +57,8 @@ export default function Card({recommendation, isGold, refresh} : {recommendation
                         </h2>
                     </div>
                     <span className="flex flex-row items-center  mt-2 gap-4">
-                        <GoldStar handleClick={handleClick} isGold={isGold}></GoldStar>
+                        <GoldStar className="cursor-pointer" handleClick={handleClick} isGold={isGold}></GoldStar>
+                        
                         <Link href={recommendation.amazonUrl} className={twMerge(buttonVariants({ variant: "default" }), " p-3 text-lg max-w-[200px]")}>
                             Purchase Now
                             <ArrowRight></ArrowRight>

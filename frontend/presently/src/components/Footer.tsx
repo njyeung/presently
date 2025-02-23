@@ -14,6 +14,8 @@ export const Footer = () => {
           </div>
           <nav className="flex flex-col md:flex-row md:justify-center gap-6 mt-6">
             <a href="/about">About</a>
+            <a href="/browse">Browse</a>
+            <a href="/saved">Saved</a>
           </nav>
           <div className="mt-6 inline-flex relative before:content-[''] before:top-2 before:bottom-0 before:w-full before:blur before:bg-gradient before:absolute">
             <p className="text-white">Brought to you by</p>
