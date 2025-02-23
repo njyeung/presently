@@ -11,7 +11,7 @@ Some of the code snippets, design ideas, and best practices used in Presently we
 Responsive Layouts & Tailwind CSS: Guidance on creating adaptive container padding and a flexible grid system.
 Dynamic Animations: Examples using Framer Motion for image scaling and animation effects.
 Next.js Routing & Data Fetching: Best practices for working with dynamic routes and asynchronous API calls.
-Specifically the creation of About page
+Creation of useless pages: Specifically the of About page
 We appreciate the AI's support in accelerating our development process while ensuring robust and scalable code.
 
 ---
