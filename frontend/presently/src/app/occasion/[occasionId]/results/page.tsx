@@ -61,7 +61,7 @@ export default async function Results({ searchParams }: {searchParams:any}) {
             price: parseInt(params.budget)
         })
     }).then((res)=>{
-        b = res.status.toString()
+        b = res.status
         return res;
     })
     .then((res)=>res.json()).then((data)=> {
@@ -84,10 +84,10 @@ export default async function Results({ searchParams }: {searchParams:any}) {
         })
     })
     
-    const dummy = [ 
+    const dummy: Recommendation[] = [ 
         {
-            name: b,
-            description: a,
+            name: b.toString(),
+            description: a.toString(),
             price: "0",
             amazonUrl: "https://amazon.com/smartphone-x",
             imageUrl: [
