@@ -35,7 +35,7 @@ const occasions = [
 
 export default function Ocassions() {
     const router = useRouter()
-    return <section id="ocassions" className="py-10 bg-gray-50">
+    return <section id="ocassions" className="pt-10 pb-12 bg-gray-50">
       <div className="contain mx-auto px-4">
         <h2 className="text-3xl font-bold mb-8">Explore Occasions</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">

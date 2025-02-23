@@ -11,8 +11,8 @@ import {motion} from "framer-motion"
 export default function Hero() {
     return <section className="md:pt-10 pt-20 pb-20 bg-gradient">
         <div className="contain">
-            <div className="flex md:flex-row flex-col items-center gap-5">
-                <div className="max-w-[500px]">
+            <div className="flex md:flex-row flex-col items-center gap-5 justify-center">
+                <div className="max-w-[600px]">
                     <h1 className="text-4xl md:text-7xl font-bold black bg-clip-text mt-6">
                         PresentLy Perfect for Every Occasion
                     </h1>
