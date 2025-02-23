@@ -9,7 +9,7 @@ export const Footer = () => {
     <footer className="bg-black text-[#BCBCBC] text-sm py-10 text-center">
       <div className="container">
         <div className="inline-flex relative before:content-[''] before:top-2 before:bottom-0 before:w-full before:blur before:bg-gradient before:absolute">
-          <p className="text-white">&nbsp;PresentLy &copy;</p>
+          <p className="text-white">PresentLy &copy;</p>
         </div>
         <nav className="flex flex-col md:flex-row md:justify-center gap-6 mt-6">
           <a href="/about">About</a>

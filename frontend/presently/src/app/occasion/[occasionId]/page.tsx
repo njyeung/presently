@@ -1,14 +1,17 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { buttonVariants } from "@/components/ui/button"
 import { twMerge } from "tailwind-merge";
 import ArrowRight from "@/assets/arrow-right";
+import { useRouter } from 'next/navigation'
 
 const occasions = ["Birthday", "Graduation", "Anniversary", "Christmas"];
 
 export default function Occasion() {
+    const router = useRouter();
+    
     const { occasionId } = useParams();
     const occasionIdNumber =
     typeof occasionId === "string"
@@ -16,6 +19,12 @@ export default function Occasion() {
       : Array.isArray(occasionId)
       ? parseInt(occasionId[0], 10) || 0
       : 0;
+    
+    useEffect(()=>{
+        if(occasionIdNumber > 4 || occasionIdNumber <= 0) {
+            router.back();
+        }
+    }, [])
 
     const [formData, setFormData] = useState({
         occasion: occasionIdNumber,
@@ -44,17 +53,21 @@ export default function Occasion() {
         });
     };
     
-    
+    const handleSubmit = (e:any) => {
+        e.preventDefault();
+        console.log("SUBMIT");
+    }
 
     return <section className="bg-gradient py-20">
-        <div className="max-w-2xl mx-auto contain">
-            <h1 className="text-3xl font-bold mb-6">Survey for {occasions[occasionIdNumber-1]}</h1>
-            <form className="space-y-4">
+            <div className="max-w-2xl mx-auto contain">
+            <h1 className="text-3xl font-bold mb-6">Find a PresentLy 
+                {occasions[occasionIdNumber-1]} 
+            gift</h1>
+            <form className="space-y-4" onSubmit={handleSubmit}>
             {/* Global Parameters */}
             <div>
                 <label className="block mb-1 font-medium">Age</label>
                 <input
-                type="number"
                 name="age"
                 value={formData.params.age}
                 onKeyPress={(e)=>{
@@ -109,7 +122,6 @@ export default function Occasion() {
             <div>
                 <label className="block mb-1 font-medium">Budget ($)</label>
                 <input
-                type="number"
                 name="budget"
                 value={formData.params.budget}
                 onKeyPress={(e)=>{
