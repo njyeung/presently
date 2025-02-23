@@ -37,12 +37,19 @@ def generate_products():
         try:
             cleaned_df.loc[index, "id"] = i
             i += 1
+            # Handle both regular strings and Unicode escape sequences
+            try:
+                name = row["name"].encode("ascii").decode("unicode-escape")
+            except UnicodeEncodeError:
+                name = row["name"]
+            cleaned_df.loc[index, "name"] = name
             image_urls = ast.literal_eval(row["imageUrls"])
             cleaned_df.loc[index, "imageUrls"] = _format_array_for_postgres(image_urls)
             cleaned_df.loc[index, "salePrice"] = (
                 row["salePrice"] if not pd.isna(row["salePrice"]) else None
             )
         except Exception as e:
+            logging.error(f"Error processing row {index}: {e}")
             continue
     cleaned_df["id"] = cleaned_df["id"].astype(int)
 
@@ -62,11 +69,11 @@ def generate_categories() -> set:
     for index, row in cleand_df.iterrows():
         try:
             categories_dict = ast.literal_eval(row["breadcrumbs"])
-            categories = [categories_dict[-2].get("name")]
+            categories = categories_dict[0:1] + categories_dict[-2:-1]
+            categories = [category.get("name") for category in categories]
             for category in categories:
                 all_categories.add(category)
         except Exception as e:
-            # logging.error(f"Error processing row {index}: {e}")
             continue
     print(len(all_categories))
 
@@ -87,42 +94,97 @@ def generate_product_categories():
     sp_products: pd.DataFrame = pd.read_csv("products_rows.csv")
     sp_categories: pd.DataFrame = pd.read_csv("categories_rows.csv")
     products_df = pd.read_csv("amazon_com_best_sellers_2025_01_27.csv")
-    clean_df = products_df[["breadcrumbs", "name"]].dropna().drop_duplicates()
+    clean_df = (
+        products_df[["breadcrumbs", "name"]]
+        .dropna(subset=["breadcrumbs", "name"])
+        .drop_duplicates(subset=["name"])
+    )
+    logging.info(f"Processing {len(clean_df)} unique products")
 
     products_id_dict = dict(zip(sp_products["name"], sp_products["id"]))
     categories_id_dict = dict(zip(sp_categories["name"], sp_categories["id"]))
-
     product_categories = []
+
     for index, row in clean_df.iterrows():
         try:
             categories_dict = ast.literal_eval(row["breadcrumbs"])
-            if len(categories_dict) < 2:
-                continue
-            tmp_categories = categories_dict[-2:]
-            tmp_categories = [category.get("name") for category in tmp_categories]
-            for category in tmp_categories:
-                product_id = products_id_dict.get(row["name"]) or None
-                category_id = categories_id_dict.get(category) or None
 
-                if product_id and category_id:
-                    product_categories.append(
-                        {"product_id": product_id, "category_id": category_id}
+            # Validate breadcrumbs structure
+            if not isinstance(categories_dict, list):
+                logging.warning(f"Invalid breadcrumbs format for product {row['name']}")
+                continue
+
+            # We need at least 2 categories for our logic
+            if len(categories_dict) < 2:
+                logging.warning(f"Too few breadcrumbs for product {row['name']}")
+                continue
+
+            # Get the first and second-to-last categories
+            categories_to_use = []
+            if len(categories_dict) >= 1:
+                categories_to_use.append(categories_dict[0])
+            if len(categories_dict) >= 2:
+                categories_to_use.append(categories_dict[-2])
+
+            product_id = products_id_dict.get(row["name"])
+            if not product_id:
+                logging.warning(f"Product not found in mapping: {row['name']}")
+                continue
+
+            # Process each selected category
+            for category_dict in categories_to_use:
+                if not isinstance(category_dict, dict) or "name" not in category_dict:
+                    logging.warning(
+                        f"Invalid category format for product {row['name']}"
                     )
-                else:
                     continue
 
-        except (ValueError, SyntaxError) as e:
-            logging.error(f"Error processing row {index}: {e}")
-            continue
+                category_name = category_dict["name"]
+                category_id = categories_id_dict.get(category_name)
+
+                if not category_id:
+                    logging.warning(f"Category not found in mapping: {category_name}")
+                    continue
+
+                product_categories.append(
+                    {"product_id": product_id, "category_id": category_id}
+                )
+
         except Exception as e:
-            logging.info(f"Unexpected error processing row {index}: {e}", exc_info=True)
+            logging.error(f"Error processing product {row['name']}: {e}")
             continue
+
     product_categories = pd.DataFrame(product_categories).drop_duplicates()
+    logging.info(f"Generated {len(product_categories)} product-category mappings")
+
     supabase.table("product_categories").upsert(
         product_categories.to_dict(orient="records")
     ).execute()
+
+    return product_categories
+
+
+# TODO
+def query_all_from_table(table_name: str):
+    all_data = []
+    more = True
+    offset = 0
+    limit = 1000
+    while more:
+        list = (
+            supabase.table(table_name)
+            .select("*")
+            .range(offset, offset + limit - 1)
+            .execute()
+            .data
+        )
+        all_data.extend(list)
+        if len(list) < limit:
+            more = False
+    return all_data
 
 
 if __name__ == "__main__":
     # generate_products()
     generate_product_categories()
+    # generate_categories()
