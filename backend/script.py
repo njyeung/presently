@@ -54,16 +54,17 @@ def find_categories(query: str, category_list: list) -> list:
                 "role": "system",
                 "content": "You are a helpful assistant that helps with finding product categories given specific user queries.",
             },
-
             {
                 "role": "user",
                 "content": f"""Given this query: {query}, find the most relevant categories from this list: {category_list}. 
+                I want you to pick out the category that you think is the most representative of what this person wants to buy. 
+                Then, the relevant categories that I want you to pick out from the list should be very closely related to this said category.
                 Limit your answer to FIVE categories, and return them as a list of python strings. 
                 In your output, ONLY inclde the list, don't include the code block indents. 
                 Order the items in the list by the most relevant keywords that will pinpoint the best products for the user.""",
             },
         ],
-        temperature=0.7,
+        temperature=1,
     )
     response = completion.choices[0].message.content
     print(response)
@@ -106,9 +107,9 @@ def find_top_products(query: str) -> list:
     all_product_categories = pd.DataFrame(query_all_from_table("product_categories"))
     all_categories = pd.DataFrame(query_all_from_table("categories"))
 
-    # Category joins with productCount included
+    # Category joins with productCount and importance included
     category_mapping = all_product_categories.merge(
-        all_categories[["id", "name", "productCount"]],
+        all_categories[["id", "name", "productCount", "importance"]],
         left_on="category_id",
         right_on="id",
         how="left",
@@ -118,18 +119,24 @@ def find_top_products(query: str) -> list:
         category_mapping["name"].isin(top_categories)
     ]
 
-    # Calculate category count and min productCount for each product
+    # Calculate category stats including importance
     product_stats = (
         matching_categories.groupby("product_id")
         .agg(
             {
                 "name": "count",  # This becomes category_count
                 "productCount": "min",  # Get the most niche category count
+                "importance": "max",  # Get the most specific category level
             }
         )
         .reset_index()
     )
-    product_stats.columns = ["product_id", "category_count", "min_product_count"]
+    product_stats.columns = [
+        "product_id",
+        "category_count",
+        "min_product_count",
+        "max_importance",
+    ]
 
     # Get categories for each product
     product_categories = (
@@ -145,14 +152,15 @@ def find_top_products(query: str) -> list:
         all_products, left_on="product_id", right_on="id", how="left"
     ).merge(product_categories, on="product_id", how="left")
 
-    # Sort by min_product_count (ascending), category_count (descending), and reviewCount (descending)
+    # Sort by importance (descending), then other criteria
     sorted_results = results.sort_values(
         by=[
-            "min_product_count",
-            "category_count",
-            "reviewCount",
+            "max_importance",  # Most specific categories first
+            "min_product_count",  # Then most niche products
+            "category_count",  # Then most matching categories
+            "reviewCount",  # Then most reviewed
         ],
-        ascending=[True, False, False],
+        ascending=[True, True, False, False],
     )
 
     return sorted_results.head(10).to_dict("records")
@@ -161,7 +169,7 @@ def find_top_products(query: str) -> list:
 if __name__ == "__main__":
     import json
 
-    top_products = find_top_products(query="Car,Birthday,Male,Age 16")
+    top_products = find_top_products(query="Car,Male,Age 16")
     print(json.dumps(top_products, indent=4))
 
 

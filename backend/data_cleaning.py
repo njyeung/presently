@@ -64,12 +64,15 @@ def generate_products():
 
 def generate_categories() -> set:
     """
-    Generates a unique set categories from the given DataFrame and store them in Supabase.
+    Generates a unique set of categories from the given DataFrame and stores them in Supabase.
+    Now includes 'importance' based on the category's position in breadcrumbs.
     """
-
     df = pd.read_csv("amazon_com_best_sellers_2025_01_27.csv", low_memory=False)
     cleand_df = df[["breadcrumbs"]]
-    all_categories = set()
+    
+    # Dictionary to store category:importance pairs
+    categories_importance = {}
+    
     for index, row in cleand_df.iterrows():
         try:
             categories_dict = ast.literal_eval(row["breadcrumbs"])
@@ -81,22 +84,32 @@ def generate_categories() -> set:
                 categories = categories_dict[0:3]
             else:
                 categories = categories_dict[0:-1]
-            categories = [category.get("name") for category in categories]
-            for category in categories:
-                all_categories.add(category)
+                
+            # Process categories with their positions
+            for pos, category_dict in enumerate(categories):
+                category_name = category_dict.get("name")
+                # Store the maximum position (most niche) for each category
+                if category_name not in categories_importance or pos > categories_importance[category_name]:
+                    categories_importance[category_name] = pos
+                    
         except Exception as e:
             continue
-    print(len(all_categories))
-    input()
 
+    print(f"Found {len(categories_importance)} categories")
+
+    # Create the final list of categories with IDs and importance
     all_categories_dict = []
     i = 1
-    for category in all_categories:
-        all_categories_dict.append({"name": category, "id": i})
+    for category, importance in categories_importance.items():
+        all_categories_dict.append({
+            "name": category,
+            "id": i,
+            "importance": importance
+        })
         i += 1
 
     supabase.table("categories").upsert(all_categories_dict).execute()
-    return all_categories
+    return set(categories_importance.keys())
 
 
 def update_categories():
@@ -224,6 +237,6 @@ def query_all_from_table(table_name: str):
 if __name__ == "__main__":
     # generate_products()
     # generate_product_categories()
-    # generate_categories()
-    update_categories()
+    generate_categories()
+    # update_categories()
     pass
