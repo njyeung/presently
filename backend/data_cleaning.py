@@ -67,19 +67,27 @@ def generate_categories() -> set:
     Generates a unique set categories from the given DataFrame and store them in Supabase.
     """
 
-    df = pd.read_csv("amazon_com_best_sellers_2025_01_27.csv")
+    df = pd.read_csv("amazon_com_best_sellers_2025_01_27.csv", low_memory=False)
     cleand_df = df[["breadcrumbs"]]
     all_categories = set()
     for index, row in cleand_df.iterrows():
         try:
             categories_dict = ast.literal_eval(row["breadcrumbs"])
-            categories = categories_dict[0:1] + categories_dict[-2:-1]
+            categories = None
+
+            if len(categories_dict) < 2:
+                categories = categories_dict[0:1]
+            elif len(categories_dict) < 3:
+                categories = categories_dict[0:3]
+            else:
+                categories = categories_dict[0:-1]
             categories = [category.get("name") for category in categories]
             for category in categories:
                 all_categories.add(category)
         except Exception as e:
             continue
     print(len(all_categories))
+    input()
 
     all_categories_dict = []
     i = 1
@@ -91,12 +99,41 @@ def generate_categories() -> set:
     return all_categories
 
 
+def update_categories():
+    """
+    Updates the productCount column in the categories table based on the number of
+    products associated with each category in the product_categories table.
+    Uses bulk update for better performance.
+    """
+    # Get all categories and product_categories
+    product_categories_df = pd.DataFrame(query_all_from_table("product_categories"))
+    
+    # Group by category_id and count products
+    category_counts = (
+        product_categories_df.groupby("category_id")
+        .size()
+        .reset_index(name="productCount")
+    )
+    
+    # Rename category_id to id to match the categories table
+    category_counts = category_counts.rename(columns={"category_id": "id"})
+    
+    # Prepare bulk update data
+    update_data = category_counts.to_dict(orient="records")
+    
+    # Perform bulk update
+    supabase.table("categories").upsert(update_data).execute()
+    
+    logging.info(f"Bulk updated product counts for {len(category_counts)} categories")
+    return category_counts
+
+
 def generate_product_categories():
     """
     Creates N:N mapping between products and categories.
     """
-    sp_products: pd.DataFrame = pd.read_csv("products_rows.csv")
-    sp_categories: pd.DataFrame = pd.read_csv("categories_rows.csv")
+    sp_products: pd.DataFrame = pd.DataFrame(query_all_from_table("products"))
+    sp_categories: pd.DataFrame = pd.DataFrame(query_all_from_table("categories"))
     products_df = pd.read_csv("amazon_com_best_sellers_2025_01_27.csv")
     clean_df = (
         products_df[["breadcrumbs", "name"]]
@@ -120,15 +157,11 @@ def generate_product_categories():
 
             # We need at least 2 categories for our logic
             if len(categories_dict) < 2:
-                logging.warning(f"Too few breadcrumbs for product {row['name']}")
-                continue
-
-            # Get the first and second-to-last categories
-            categories_to_use = []
-            if len(categories_dict) >= 1:
-                categories_to_use.append(categories_dict[0])
-            if len(categories_dict) >= 2:
-                categories_to_use.append(categories_dict[-2])
+                categories = categories_dict[0:1]
+            elif len(categories_dict) < 3:
+                categories = categories_dict[0:3]
+            else:
+                categories = categories_dict[0:-1]
 
             product_id = products_id_dict.get(row["name"])
             if not product_id:
@@ -136,7 +169,7 @@ def generate_product_categories():
                 continue
 
             # Process each selected category
-            for category_dict in categories_to_use:
+            for category_dict in categories:
                 if not isinstance(category_dict, dict) or "name" not in category_dict:
                     logging.warning(
                         f"Invalid category format for product {row['name']}"
@@ -189,6 +222,8 @@ def query_all_from_table(table_name: str):
 
 
 if __name__ == "__main__":
-    generate_products()
+    # generate_products()
     # generate_product_categories()
     # generate_categories()
+    update_categories()
+    pass
